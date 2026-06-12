@@ -1,21 +1,15 @@
-streamlit==1.37.1
+streamlit
 
-langchain==0.2.16
-langchain-community==0.2.16
-langchain-core==0.2.38
-langchain-openai==0.1.25
-langchain-text-splitters==0.2.4
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchain-text-splitters
 
-langchain-huggingface==0.0.3
+langchain-huggingface
 
-sentence-transformers==3.0.1
-transformers==4.44.2
-torch==2.4.1
-torchvision==0.19.1
+sentence-transformers
 
-chromadb==0.5.5
-langchain-chroma==0.1.4
+openai
 
-protobuf==3.20.3
-
-openai==1.40.6
+faiss-cpu
