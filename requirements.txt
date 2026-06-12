@@ -1,0 +1,11 @@
+streamlit
+langchain
+langchain-community
+langchain-chroma
+langchain-huggingface
+langchain-openai
+langchain-text-splitters
+langchain-core
+sentence-transformers
+openai
+chromadb
