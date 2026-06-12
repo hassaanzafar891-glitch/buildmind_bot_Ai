@@ -1,0 +1,104 @@
+Company Name: BuildMind AI
+
+About Us:
+BuildMind AI is a software company specializing in AI automation, 
+intelligent chatbots, and full stack web development. We help US 
+businesses save time, reduce costs, and grow revenue by integrating 
+cutting-edge AI solutions into their operations. Founded by a team 
+of passionate AI engineers, BuildMind AI delivers fast, affordable, 
+and high quality technology solutions tailored to each client's needs.
+
+Contact Information:
+Email: contact@buildmind.ai
+Business Email: hassaan@buildmind.ai
+Temporary Email: buildmindai.solutions@gmail.com
+Website: www.buildmind.ai (coming soon)
+Working Hours: Monday to Friday, 9am to 6pm EST
+
+Services:
+
+1. AI Chatbot Development
+We build intelligent chatbots trained on your company data.
+Your customers get instant accurate answers 24/7.
+No more missed inquiries or delayed responses.
+Price: $500 - $1500 depending on complexity
+
+2. RAG Document Assistant
+We build AI assistants that read your documents, manuals, and FAQs.
+Employees and customers can ask questions and get instant answers.
+Perfect for customer support, HR, and knowledge management.
+Price: $800 - $1500
+
+3. AI Agent Development
+We build autonomous AI agents that complete business tasks automatically.
+Examples: lead research, data extraction, email automation, report generation.
+Save 10 to 20 hours per week of manual work.
+Price: $1500 - $3000
+
+4. Full Stack Web Development
+We build modern fast and scalable web applications.
+Frontend: React, JavaScript, HTML/CSS
+Backend: Node.js, Express
+Database: MongoDB, MySQL
+We deliver clean professional websites that convert visitors into clients.
+Price: $800 - $2000
+
+5. AI Automation Solutions
+We identify repetitive tasks in your business and automate them using AI.
+Examples: invoice processing, email sorting, data entry, report generation.
+Price: $1000 - $2500
+
+6. AI Consulting
+Not sure where to start with AI? We assess your business and create a 
+clear roadmap for AI integration that saves time and increases revenue.
+Price: $50 - $100 per hour
+
+Monthly Maintenance and Support:
+We offer ongoing support and maintenance for all our products.
+Price: $100 - $300 per month
+
+Our Process:
+Step 1: Free consultation call to understand your business needs
+Step 2: We propose a solution with clear pricing and timeline
+Step 3: Development begins with weekly progress updates
+Step 4: Testing and quality assurance
+Step 5: Delivery and deployment
+Step 6: Ongoing support and maintenance
+
+Why Choose BuildMind AI:
+- Affordable pricing compared to US agencies
+- Fast turnaround time
+- Direct communication with developers
+- AI expertise combined with full stack development
+- Money back guarantee if deliverables are not met
+- Free consultation for every new client
+
+Frequently Asked Questions:
+
+Q: How long does it take to build a chatbot?
+A: A basic chatbot takes 3 to 5 days. A RAG chatbot trained on your 
+documents takes 5 to 7 days.
+
+Q: Do you offer refunds?
+A: Yes. If we fail to deliver what was agreed, we offer a full refund 
+within 30 days of project completion.
+
+Q: Can you work with our existing website?
+A: Yes. We integrate our AI solutions with any existing website or platform.
+
+Q: Do you sign NDAs?
+A: Yes. We sign NDAs before starting any project to protect your data.
+
+Q: What industries do you serve?
+A: We serve all industries including e-commerce, legal, healthcare, 
+real estate, education, and SaaS companies.
+
+Q: How do we get started?
+A: Email us at buildmindai.solutions@gmail.com for a free consultation call.
+
+Guarantees:
+- Free consultation for every client
+- Weekly progress updates during development
+- Full refund if deliverables are not met
+- NDA signing before project start
+- Ongoing support after delivery
