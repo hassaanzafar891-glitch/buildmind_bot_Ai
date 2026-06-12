@@ -6,11 +6,16 @@ langchain-core==0.2.38
 langchain-openai==0.1.25
 langchain-text-splitters==0.2.4
 
-langchain-chroma==0.1.4
-chromadb==0.5.5
-
 langchain-huggingface==0.0.3
+
 sentence-transformers==3.0.1
+transformers==4.44.2
+torch==2.4.1
+torchvision==0.19.1
+
+chromadb==0.5.5
+langchain-chroma==0.1.4
+
+protobuf==3.20.3
 
 openai==1.40.6
-protobuf==4.25.3
