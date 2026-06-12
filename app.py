@@ -27,33 +27,31 @@ st.caption("Ask me anything about our services, pricing, and process.")
 def load_rag():
     loader = TextLoader("buildmind_company_data.txt")
     documents = loader.load()
-
+    
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=300,
+        chunk_size=300, 
         chunk_overlap=30
     )
     chunks = splitter.split_documents(documents)
-
+    
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
-vectorstore = FAISS.from_documents(chunks, embeddings)
-retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
-
+    vectorstore = FAISS.from_documents(chunks, embeddings)
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+    
     llm = ChatOpenAI(
         model="openai/gpt-oss-20b:free",
         api_key=st.secrets["OPENROUTER_API_KEY"],
         base_url="https://openrouter.ai/api/v1"
     )
-
+    
     prompt = ChatPromptTemplate.from_template("""
-You are a professional sales assistant for BuildMind AI.
-Answer questions using ONLY the context provided.
-Be helpful, confident and professional.
-If answer not in context say:
-'Please contact us at buildmindai.solutions@gmail.com'
+You are a professional sales assistant for BuildMind AI. Answer questions using ONLY the context provided. Be helpful, confident and professional. 
+If answer not in context say: 'Please contact us at buildmindai.solutions@gmail.com'
 
 Context: {context}
+
 Question: {question}
 """)
 
@@ -61,13 +59,12 @@ Question: {question}
         return "\n\n".join(doc.page_content for doc in docs)
 
     chain = (
-        {"context": retriever | format_docs,
-         "question": RunnablePassthrough()}
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
         | prompt
         | llm
         | StrOutputParser()
     )
-
+    
     return chain
 
 # Load the chain
@@ -91,12 +88,12 @@ for message in st.session_state.messages:
 
 # User input
 if prompt_input := st.chat_input("Ask me anything..."):
-
     # Show user message
     st.session_state.messages.append({
-        "role": "user",
+        "role": "user", 
         "content": prompt_input
     })
+    
     with st.chat_message("user"):
         st.markdown(prompt_input)
 
@@ -108,6 +105,6 @@ if prompt_input := st.chat_input("Ask me anything..."):
 
     # Save response
     st.session_state.messages.append({
-        "role": "assistant",
+        "role": "assistant", 
         "content": response
     })
