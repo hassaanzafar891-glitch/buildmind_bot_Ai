@@ -7,6 +7,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.messages import HumanMessage, AIMessage
 
 # ─────────────────────────────────
 # PAGE SETTINGS
@@ -27,52 +28,33 @@ st.caption("Ask me anything about our services, pricing, and process.")
 def load_rag():
     loader = TextLoader("buildmind_company_data.txt")
     documents = loader.load()
-    
+
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=300, 
+        chunk_size=300,
         chunk_overlap=30
     )
     chunks = splitter.split_documents(documents)
-    
+
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2"
     )
     vectorstore = FAISS.from_documents(chunks, embeddings)
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
-    
+
     llm = ChatOpenAI(
         model="openai/gpt-oss-20b:free",
         api_key=st.secrets["OPENROUTER_API_KEY"],
         base_url="https://openrouter.ai/api/v1"
     )
-    
-    prompt = ChatPromptTemplate.from_template("""
-You are a professional sales assistant for BuildMind AI. Answer questions using ONLY the context provided. Be helpful, confident and professional. 
-If answer not in context say: 'Please contact us at buildmindai.solutions@gmail.com'
 
-Context: {context}
+    return retriever, llm
 
-Question: {question}
-""")
-
-    def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
-
-    chain = (
-        {"context": retriever | format_docs, "question": RunnablePassthrough()}
-        | prompt
-        | llm
-        | StrOutputParser()
-    )
-    
-    return chain
-
-# Load the chain
+# Load retriever and LLM
 with st.spinner("Loading BuildMind AI Assistant..."):
-    rag_chain = load_rag()
+    retriever, llm = load_rag()
 
 # ─────────────────────────────────
-# CHAT INTERFACE
+# INITIALIZE CHAT HISTORY
 # ─────────────────────────────────
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -86,25 +68,78 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# User input
+# ─────────────────────────────────
+# CHAT FUNCTION WITH MEMORY
+# ─────────────────────────────────
+def ask_with_memory(question, chat_history):
+
+    # Format chat history for context
+    history_text = ""
+    for msg in chat_history[-6:]:  # last 6 messages only
+        if msg["role"] == "user":
+            history_text += f"User: {msg['content']}\n"
+        else:
+            history_text += f"Assistant: {msg['content']}\n"
+
+    # Get relevant docs from RAG
+    docs = retriever.get_relevant_documents(question)
+    context = "\n\n".join(doc.page_content for doc in docs)
+
+    # Build prompt with memory + context
+    prompt = ChatPromptTemplate.from_template("""
+You are a professional sales assistant for BuildMind AI.
+
+Previous conversation:
+{history}
+
+Company information:
+{context}
+
+Rules:
+1. Remember everything from the conversation history
+2. Answer using company information when relevant
+3. If someone tells you their name — remember it
+4. If answer not in context and not in history say:
+   'Please contact us at buildmindai.solutions@gmail.com'
+5. Be helpful, confident and professional
+
+Current question: {question}
+""")
+
+    chain = prompt | llm | StrOutputParser()
+
+    response = chain.invoke({
+        "history": history_text,
+        "context": context,
+        "question": question
+    })
+
+    return response
+
+# ─────────────────────────────────
+# USER INPUT
+# ─────────────────────────────────
 if prompt_input := st.chat_input("Ask me anything..."):
+
     # Show user message
     st.session_state.messages.append({
-        "role": "user", 
+        "role": "user",
         "content": prompt_input
     })
-    
     with st.chat_message("user"):
         st.markdown(prompt_input)
 
-    # Get AI response
+    # Get AI response with memory
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            response = rag_chain.invoke(prompt_input)
+            response = ask_with_memory(
+                prompt_input,
+                st.session_state.messages
+            )
         st.markdown(response)
 
-    # Save response
+    # Save response to history
     st.session_state.messages.append({
-        "role": "assistant", 
+        "role": "assistant",
         "content": response
     })
