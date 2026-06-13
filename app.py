@@ -6,7 +6,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import HumanMessage, AIMessage
 
 # ─────────────────────────────────
@@ -73,48 +72,42 @@ for message in st.session_state.messages:
 # ─────────────────────────────────
 def ask_with_memory(question, chat_history):
 
-    # Format chat history for context
+    # Format chat history
     history_text = ""
-    for msg in chat_history[-6:]:  # last 6 messages only
+    for msg in chat_history[:-1]:  # all messages except current
         if msg["role"] == "user":
             history_text += f"User: {msg['content']}\n"
-        else:
+        elif msg["role"] == "assistant":
             history_text += f"Assistant: {msg['content']}\n"
 
     # Get relevant docs from RAG
     docs = retriever.invoke(question)
     context = "\n\n".join(doc.page_content for doc in docs)
 
-    # Build prompt with memory + context
-    prompt = ChatPromptTemplate.from_template("""
-You are a professional sales assistant for BuildMind AI.
+    # Build full prompt manually
+    full_prompt = f"""You are a professional sales assistant for BuildMind AI.
 
-Previous conversation:
-{history}
+CONVERSATION HISTORY (very important — read carefully):
+{history_text}
 
-Company information:
+COMPANY INFORMATION:
 {context}
 
-Rules:
-1. Remember everything from the conversation history
-2. Answer using company information when relevant
-3. If someone tells you their name — remember it
-4. If answer not in context and not in history say:
-   'Please contact us at buildmindai.solutions@gmail.com'
-5. Be helpful, confident and professional
+RULES:
+1. You MUST read the conversation history above
+2. If someone told you their name earlier — use it
+3. If asked what was discussed — summarize the history
+4. Answer company questions from company information
+5. If truly unknown say: 'Please contact buildmindai.solutions@gmail.com'
+6. Be helpful, confident and professional
 
-Current question: {question}
-""")
+USER'S CURRENT MESSAGE: {question}
 
-    chain = prompt | llm | StrOutputParser()
+YOUR RESPONSE:"""
 
-    response = chain.invoke({
-        "history": history_text,
-        "context": context,
-        "question": question
-    })
-
-    return response
+    from langchain_core.messages import HumanMessage
+    response = llm.invoke([HumanMessage(content=full_prompt)])
+    return response.content
 
 # ─────────────────────────────────
 # USER INPUT
