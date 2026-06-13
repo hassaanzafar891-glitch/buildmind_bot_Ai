@@ -82,7 +82,7 @@ def ask_with_memory(question, chat_history):
             history_text += f"Assistant: {msg['content']}\n"
 
     # Get relevant docs from RAG
-    docs = retriever.get_relevant_documents(question)
+    docs = retriever.invoke(question)
     context = "\n\n".join(doc.page_content for doc in docs)
 
     # Build prompt with memory + context
